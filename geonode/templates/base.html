@@ -322,6 +322,7 @@
               <a href="{% url "maps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Maps" %}</a>
               {% endif %}
           </li>
+            {% if user.is_superuser or user.is_staff %}
           <li>
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans "About" %}<i class="fa fa-angle-down fa-lg"></i></a>
               <ul class="dropdown-menu">
@@ -341,7 +342,7 @@
                 {% endif %}
               </ul>
           </li>
-
+            {% endif %}
           {% block extra_tab %}
 
           {% endblock %}
@@ -494,6 +495,7 @@
             {% endif %}
           </ul>
         </div>
+          {% if user.is_superuser or user.is_staff %}
     <div class="col-md-2">
           <ul class="list-unstyled">
             <li>{% trans "About" %}</li>
@@ -511,7 +513,7 @@
             {% endif %}
           </ul>
         </div>
-
+         {% endif %}
         <div class="col-md-6 text-right">
           {% block contactus %}
           {% if custom_theme.contactus %}
