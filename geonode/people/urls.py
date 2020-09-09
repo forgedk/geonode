@@ -24,8 +24,7 @@ from .views import ProfileAutocomplete
 from . import views
 
 urlpatterns = [  # 'geonode.people.views',
-    url(r'^$', TemplateView.as_view(template_name='people/profile_list.html'),
-        name='profile_browse'),
+    url(r'^$',  views.browse_profiles,name='profile_browse'),
     url(r"^edit/$", views.profile_edit, name="profile_edit"),
     url(r"^edit/(?P<username>[^/]*)$",
         views.profile_edit, name="profile_edit"),

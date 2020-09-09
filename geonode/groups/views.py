@@ -39,6 +39,7 @@ from django.views.generic import ListView, CreateView
 from django.views.generic.edit import UpdateView
 from django.views.generic.detail import DetailView
 from django.db.models import Q
+from django.contrib.admin.views.decorators import staff_member_required
 
 from geonode.decorators import view_decorator, superuser_only
 from geonode.base.views import SimpleSelect2View
@@ -57,11 +58,11 @@ class GroupCategoryCreateView(CreateView):
     model = models.GroupCategory
     fields = ['name', 'description']
 
-
+@view_decorator(superuser_only, subclass=True)
 class GroupCategoryDetailView(DetailView):
     model = models.GroupCategory
 
-
+@view_decorator(superuser_only, subclass=True)
 class GroupCategoryUpdateView(UpdateView):
     model = models.GroupCategory
     fields = ['name', 'description']
@@ -151,7 +152,7 @@ class GroupDetailView(ListView):
         context['can_view'] = self.group.can_view(self.request.user)
         return context
 
-
+@staff_member_required
 def group_members(request, slug):
     group = get_object_or_404(models.GroupProfile, slug=slug)
     if not group.can_view(request.user):

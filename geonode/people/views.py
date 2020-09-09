@@ -27,6 +27,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.sites.models import Site
 from django.conf import settings
 from django.http import HttpResponseForbidden
+from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q
 
 from geonode.tasks.tasks import send_email
@@ -44,6 +45,11 @@ class CustomSignupView(SignupView):
         ret.update({'account_geonode_local_signup': settings.SOCIALACCOUNT_WITH_GEONODE_LOCAL_SINGUP})
         return ret
 
+
+
+@staff_member_required
+def browse_profiles(request):
+    return render(request, "people/profile_list.html")
 
 @login_required
 def profile_edit(request, username=None):
@@ -78,7 +84,7 @@ def profile_edit(request, username=None):
         return HttpResponseForbidden(
             'You are not allowed to edit other users profile')
 
-
+@login_required
 def profile_detail(request, username):
     profile = get_object_or_404(get_user_model(), Q(is_active=True), username=username)
     # combined queryset from each model content type
