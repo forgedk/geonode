@@ -10,14 +10,14 @@ services:
       - '.:/usr/src/app'
     environment:
       - DEBUG=False
-      - GEONODE_LB_HOST_IP=localhost
+      - GEONODE_LB_HOST_IP=35.209.139.114
       - GEONODE_LB_PORT=80
-      - SITEURL=http://localhost/
-      - ALLOWED_HOSTS=['localhost', ]
-      - GEOSERVER_PUBLIC_LOCATION=http://localhost/geoserver/
-      - GEOSERVER_WEB_UI_LOCATION=http://localhost/geoserver/
+      - SITEURL=http://35.209.139.114/
+      - ALLOWED_HOSTS=['35.209.139.114', ]
+      - GEOSERVER_PUBLIC_LOCATION=http://35.209.139.114/geoserver/
+      - GEOSERVER_WEB_UI_LOCATION=http://35.209.139.114/geoserver/
 
   geoserver:
     environment:
-      - GEONODE_LB_HOST_IP=localhost
+      - GEONODE_LB_HOST_IP=35.209.139.114
       - GEONODE_LB_PORT=80
