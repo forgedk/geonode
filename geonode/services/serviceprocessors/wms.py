@@ -152,12 +152,7 @@ class WmsServiceHandler(base.ServiceHandlerBase,
     @property
     def parsed_service(self):
         cleaned_url, service, version, request = WmsServiceHandler.get_cleaned_url_params(self.url)
-        ogc_server_settings = settings.OGC_SERVER['default']
-        _url, _parsed_service = WebMapService(
-            cleaned_url,
-            version=version,
-            proxy_base=None,
-            timeout=ogc_server_settings.get('TIMEOUT', 60))
+        _url, _parsed_service = WebMapService(cleaned_url, version=version, proxy_base=None)
         return _parsed_service
 
     def create_cascaded_store(self):
