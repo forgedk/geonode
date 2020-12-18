@@ -38,6 +38,7 @@ if check_ogc_backend(geoserver.BACKEND_PACKAGE):
     new_map_view = views.new_map
     existing_map_view = views.map_view
     map_embed = views.map_embed
+    map_embed_token = views.map_embed_true
     map_edit = views.map_edit
     map_json = views.map_json
     map_thumbnail = views.map_thumbnail
@@ -61,6 +62,8 @@ maps_list = register_url_event()(TemplateView.as_view(template_name='maps/map_li
 
 urlpatterns = [
     # 'geonode.maps.views',
+    url(r'^(?P<mapid>[^/]+)/create_temp_url$', views.request_temp_map),
+    url(r'^(?P<token>[^/]+)/embed_true$', map_embed_token, name='map_embed_true'),
     url(r'^$',
         maps_list,
         {'facet_type': 'maps'},
