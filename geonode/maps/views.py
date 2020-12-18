@@ -120,6 +120,28 @@ def _resolve_map(request, id, permission='base.change_resourcebase',
     return resolve_object(request, Map, {key: id}, permission=permission,
                           permission_msg=msg, **kwargs)
 
+def _resolve_map_by_token(request, token, permission='base.change_resourcebase',
+                          msg=_PERMISSION_MSG_GENERIC, **kwargs):
+    '''
+    Resolve the Map by the provided typename and check the optional permission.
+    '''
+
+    signer = TimestampSigner()
+    id_search = signer.unsign(token, max_age=10)
+
+    if Map.objects.filter(urlsuffix=id_search).count() > 0:
+        key = 'urlsuffix'
+    else:
+        key = 'pk'
+
+    return resolve_object(request, Map, {key: id_search}, permission=permission,
+                          permission_msg=msg, permission_required=False, **kwargs)
+
+def request_temp_map(request, mapid):
+    signer = TimestampSigner()
+    id_search = signer.sign(mapid)
+    response = redirect('/maps/'+id_search+'/embed_true')
+    return response
 
 # BASIC MAP VIEWS #
 def map_detail(request, mapid, template='maps/map_detail.html'):
@@ -436,7 +458,6 @@ def map_metadata_advanced(request, mapid):
         mapid,
         template='maps/map_metadata_advanced.html')
 
-
 @login_required
 def map_remove(request, mapid, template='maps/map_remove.html'):
     ''' Delete a map, and its constituent layers. '''
@@ -494,6 +515,32 @@ def map_embed(
             _PERMISSION_MSG_VIEW)
 
         config = map_obj.viewer_json(request)
+        register_event(request, EventType.EVENT_VIEW, map_obj)
+    return render(request, template, context={
+        'config': json.dumps(config)
+    })
+
+@xframe_options_exempt
+def map_embed_true(
+        request,
+        token=None,
+        snapshot=None,
+        template='maps/map_embed.html'):
+    if token is None:
+        config = default_map_config(request)[0]
+    else:
+        map_obj = _resolve_map_by_token(
+            request,
+            token,
+            'base.view_resourcebase',
+            _PERMISSION_MSG_VIEW)
+
+        if snapshot is None:
+            config = map_obj.viewer_json(request)
+        else:
+            config = snapshot_config(
+                snapshot, map_obj, request)
+
         register_event(request, EventType.EVENT_VIEW, map_obj)
     return render(request, template, context={
         'config': json.dumps(config)
