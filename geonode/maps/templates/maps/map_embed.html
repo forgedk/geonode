@@ -1,16 +1,24 @@
-{% load i18n %}
-{% load client_lib_tags %}
-
 {% block head %}
 
+   {% get_map_view %}
     <style>
         #paneltbar {
             margin-top: 0px !important;
         }
+
+        #ms-container {
+		position: absolute;
+		top: 0px;
+		bottom: 0px;
+        width: 100%;
+        z-index: 1029;
+        background-color: white;
+    }
+
     </style>
 
     {% get_map_embed %}
+
 {% endblock head %}
 
 {% block body %}
-{% endblock %}
