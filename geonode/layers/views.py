@@ -401,7 +401,7 @@ def layer_upload(request, template='upload/layer_upload.html'):
             content_type='application/json',
             status=status_code)
 
-
+@login_required
 def layer_detail(request, layername, template='layers/layer_detail.html'):
     try:
         layer = _resolve_layer(
@@ -779,6 +779,7 @@ def layer_detail(request, layername, template='layers/layer_detail.html'):
 
 # Loads the data using the OWS lib when the "Do you want to filter it"
 # button is clicked.
+@login_required
 def load_layer_data(request, template='layers/layer_detail.html'):
     context_dict = {}
     data_dict = json.loads(request.POST.get('json_data'))
@@ -835,7 +836,7 @@ def load_layer_data(request, template='layers/layer_detail.html'):
     return HttpResponse(json.dumps(context_dict),
                         content_type="application/json")
 
-
+@login_required
 def layer_feature_catalogue(
         request,
         layername,
